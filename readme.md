@@ -1,67 +1,39 @@
-# Readme
-> I am keeping upgrading this, so the code may change everyday.
+# 修改小结
 
-## Environment
+## 重构代码
 
-- windows 10 (We use win32 API to operate the little knight and get screenshots)
-- python 3.8.8
-- python liberary: find in `requirments.txt`
-- Hollow Knight
-- HP Bar mod for Hollow Knight (In order to get the boss hp to calculate the reward, please find the mod in `./hollow_knight_Data/`, and then copy the mod file to the game folder)
-- CUDA and cudnn for tensorflow
+* 共享部分
+  * 删除无用变量，无用函数，无用import等dead code
+  * 删除弃用掉的（被注释掉的）代码
+  * 统一注释风格
+  * 删除测试用代码，如test.py，test_model.py
+* model.py
+  * 封装不同网络结构代码以方便调用
+    * resnet18与resnet34
+    * 全连接层数量调整，1->3
+    * 恢复resnet模块的batch normalization
+* DQN.py
+  * MoveModel与ActionModel分块成不同class
+  * 只调用一两次的函数删去，代码直接使用
+* train.py
+  * 暂无
+* Agent.py
+  * 修改无意义数字为宏定义
+  * 简单的if语句修改为运算
+* 可参考commit记录的修改！！
 
-## Usage
+## 网络结构更改
 
-- Now I only write train.py but not test.py (the file is just test some base functions not for model), you can write it by yourself if you get a good model.
-- I upload a saving file, if you never played this game, please move `/save_file/user3.dat` into save folder (usually `C:\user\_username_\AppData\LocalLow\Team Cherry\Hollow Knight`)
-- Adjust the game resolution to 1920*1017 
-- Run train.py
-- Keep the game window at the forefront (Since I cannot send keyboard event in the background, I tried `PossMassage()` in win32 API, but it did not work well.
-                                         If you have any idea about sending keyboard event in the background, please let me know)
-- Let the little knight stand in front of the statue of the boss in the godhome
-- Press `F1` to start trainning. (Also you can use `F1` to stop trainning)
+目前计划如下
 
+* 修改resnet结构，如resnet18，34，50，56等等
+* 增加输出层的全连接层数量，如1，3，5等等
+* 绘制出不同网络结构的表格数据
 
-## Code structure
-- Most training configuration is in `train.py`
-- `Agent.py` gets output actions from our model
-- `DQN.py` is the learning algorithm
-- `Model.py` defines the model we use
-- `ReplayMemory.py` defines the experience pool for learning
-- `test.py` is useless, I use it to test basic functions and fix bugs
-
-- Files in `./Tool` are for other functions we may use
-- `Actions` defines actions for little knight and restart game script
-- `GetHp` help us get our hp, boss hp, soul and location(it may have some bugs, you can fix it by yourself)
-- `SendKey` is the API we use to send keyboard event to windows system.
-- `UserInput` is an useless file, which I used it to train my model manually.
-- `WindowsAPI` is used to get screenshot of the game, and `key_check()` is used to check which key is pressed.
-- `Helper` defines [Reward Jugment] fucntion, and other functions we may use
-
-## Changes
-
-- Add delay reward of an action
-
-- Make the mdoel output an action sequence
-
-- Use two models to output actions. One is for moving and the other is for attack/jump/skill
-
-- Apply RESNET
-
-- Add LSTM layers
-
-- Merge a part of action model and move model
-
-- Remvoe LSTM layers
-
-- No more Q value, reward is enough, Q value is too complex to learn.
-
-- Use kernel32 to read player Hp and hornet Hp.
-
-- Use different criteria to evaluate move and actions.
-
-- Do not use skill without souls
-
-- Use more precise scoring standards
-
+|          |  1   | 3    | 5    |
+| -------- | :--: | ---- | ---- |
+| resnet18 |      |      |      |
+| resnet34 |      |      |      |
+| resnet50 |      |      |      |
+| resnet56 |      |      |      |
 

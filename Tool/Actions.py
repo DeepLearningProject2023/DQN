@@ -144,9 +144,6 @@ def Rush():
     time.sleep(0.03)
     ReleaseKey(X)
 
-    
-
-
 
 # Cure
 def Cure():
